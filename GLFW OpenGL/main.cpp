@@ -24,7 +24,7 @@ int main(int argc, const char * argv[]) {
     //Set properties for window
     // v3.4
     glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3);
     // Telling GLFW we want to use the core-profile means we'll get
     // access to a smaller subset of OpenGL features without
     // backwards-compatible features we no longer need
@@ -56,5 +56,34 @@ int main(int argc, const char * argv[]) {
         glfwTerminate();
         return -1;
     }
+    
     glfwMakeContextCurrent(window);
+    glewExperimental = GL_TRUE; //allows newer opengl functionality
+    
+    
+    // we mentioned that GLAD manages function pointers for OpenGL so we want to initialize GLAD before we call any OpenGL function:
+    
+    if(GLEW_OK != glewInit()){
+        std::cout << "Failed to initialize GLEW" << std::endl;
+        
+        return -1;
+    }
+    
+    glViewport(0, 0, screenWidth, screenHeight);
+    
+    while (!glfwWindowShouldClose(window)){
+        //while window is open or not closing continue this loop
+        // process inputs, stages etc
+        glfwPollEvents();
+        
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear( GL_COLOR_BUFFER_BIT );
+        
+        glfwSwapBuffers(window);
+    }
+    
+    // window has now closed
+    
+    glfwTerminate();
+    return 0;
 }
