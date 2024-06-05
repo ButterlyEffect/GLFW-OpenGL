@@ -17,6 +17,12 @@
 const GLint WIDTH = 800, HEIGHT = 600;
 
 
+void processInput(GLFWwindow *window)
+{
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
+
 
 int main(int argc, const char * argv[]) {
     //init GFLW
@@ -76,14 +82,25 @@ int main(int argc, const char * argv[]) {
         // process inputs, stages etc
         glfwPollEvents();
         
+        processInput(window);
+        
+        
+        // rendering commands here
+        // At the start of frame we want to clear the screen. Otherwise we would still see the results from the previous frame (this could be the effect you're looking for, but usually you don't). We can clear the screen's color buffer using glClear where we pass in buffer bits to specify which buffer we would like to clear. The possible bits we can set are GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT and GL_STENCIL_BUFFER_BIT. Right now we only care about the color values so we only clear the color buffer.
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear( GL_COLOR_BUFFER_BIT );
+
         
+        // will swap the color buffer (a large 2D buffer that contains color
+        // values for each pixel in GLFW's window) that is used to render
+        // to during this render iteration and show it as output to the screen.
+        // double buffer (check notes)
         glfwSwapBuffers(window);
     }
     
     // window has now closed
     
+    // properly clean/delete all of GLFW's resources
     glfwTerminate();
     return 0;
 }
