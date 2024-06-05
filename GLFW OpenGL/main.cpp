@@ -23,6 +23,51 @@ void processInput(GLFWwindow *window)
         glfwSetWindowShouldClose(window, true);
 }
 
+void drawTriangle(){
+    // All coordinates within this so called normalized device coordinates
+    // range will end up visible on your screen (and all coordinates outside this region won't).
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
+    };
+    
+    // With the vertex data defined we'd like to send it as input to the first process
+    // of the graphics pipeline: the vertex shader.
+    // This is done by creating memory on the GPU where we store the vertex data,
+    // configure how OpenGL should interpret the memory and specify how to send
+    // the data to the graphics card. The vertex shader then processes as much
+    // vertices as we tell it to from its memory.
+    
+    // Memory is managed with Vertex Buffer Objects (VBO) - stores large number of vertices in the GPU's memory
+    // Once the data is in the graphics card's memory the vertex shader has almost instant access to
+    // the vertices making it extremely fast
+    
+    
+    // Just like any object in OpenGL, this buffer has a unique ID corresponding to that buffer,
+    // so we can generate one with a buffer ID using the glGenBuffers function:
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    
+    // OpenGL has many types of buffer objects and the buffer type of a
+    // vertex buffer object is GL_ARRAY_BUFFER. OpenGL allows us to bind
+    // to several buffers at once as long as they have a different buffer
+    // type.
+    // We can bind the newly created buffer to the GL_ARRAY_BUFFER target with the glBindBuffer fun
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    
+    // Then we can make a call to the glBufferData function that copies the
+    // previously defined vertex data into the buffer's memory:
+    // The fourth parameter specifies how we want the graphics card to manage the given data. This can take 3 forms:
+    
+    //GL_STREAM_DRAW: the data is set only once and used by the GPU at most a few times.
+    //GL_STATIC_DRAW: the data is set only once and used many times.
+    //GL_DYNAMIC_DRAW: the data is changed a lot and used many times.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    //Vertex Shader
+
+}
 
 int main(int argc, const char * argv[]) {
     //init GFLW
